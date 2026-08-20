@@ -1,7 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import psutil
 
 app = Flask(__name__)
+
+# --------------
+# API ROUTES
+# -------------
 
 @app.route("/api/health")
 def health():
@@ -18,6 +22,14 @@ def stats():
         "ram_percent": ram.percent,
         "disk_percent": disk.percent
     })
+
+# ------------
+# WEB ROUTES
+# ------------
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     app.run()
