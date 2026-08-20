@@ -5,10 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
     <title>Dashboard</title>
 </head>
 <body>
-    <p>hello world</p>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Home Server Dashboard</h1>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <!-- CPU Meter Card -->
+            <div class="card">
+                <h2>CPU Usage</h2>
+                <div class="gauge-wrapper">
+                    <canvas id="cpu-gauge"></canvas>
+                </div>
+                <p id="cpu-usage">--%</p>
+            </div>
+
+            <!-- RAM Meter Card -->
+            <div class="card">
+                <h2>RAM Usage</h2>
+                <div class="gauge-wrapper">
+                    <canvas id="ram-gauge"></canvas>
+                </div>
+                <p id="ram-usage">--%</p>
+            </div>
+
+            <!-- Disk Card -->
+            <div class="card">
+                <h2>Disk Usage</h2>
+                <div class="disk-display">
+                    <p id="disk-usage">--%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

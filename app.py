@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, redirect, url_for
 import psutil
 
 app = Flask(__name__)
@@ -26,6 +26,10 @@ def stats():
 # ------------
 # WEB ROUTES
 # ------------
+
+@app.route("/")
+def home():
+    return redirect(url_for("dashboard"))
 
 @app.route("/dashboard")
 def dashboard():
