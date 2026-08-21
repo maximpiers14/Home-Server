@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function controlJellyfin(action) {
+        // Richt zich strikt op het bericht-element onder de knoppen
         const messageEl = document.getElementById('jellyfin-message');
         
         if (messageEl) {
@@ -129,6 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageEl.innerText = "Server wordt gestopt...";
                 messageEl.style.color = "#f59e0b";
             }
+        } else {
+            console.error("Kan element #jellyfin-message niet vinden in de HTML!");
         }
 
         try {
