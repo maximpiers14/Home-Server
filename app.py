@@ -60,6 +60,36 @@ def stop_jellyfin():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+# ALL THE ADDGUARD ROUTES
+
+@app.route("/api/adguard/status")
+def adguard_stats():
+    try:
+        container = client.containers.get("adguardhome")
+        if container.status == "running":
+            return jsonify({"status": "online"})
+    except Exception:
+        pass
+    return jsonify({"status": "offline"})
+
+@app.route("/api/adguard/start", methods=["POST"])
+def start_adguard():
+    try:
+        container = client.containers.get("adguardhome")
+        container.start()
+        return jsonify({"success": True, "message": "AdGuard gestart"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/adguard/stop", methods=["POST"])
+def stop_adguard():
+    try:
+        container = client.containers.get("adguardhome")
+        container.stop()
+        return jsonify({"success": True, "message": "AdGuard gestopt"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 # ------------
 # WEB ROUTES
 # ------------
