@@ -75,10 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cpuGauge = new GaugePainter('cpu-gauge', '#38bdf8');
     const ramGauge = new GaugePainter('ram-gauge', '#34d399');
 
-    const startBtn = document.getElementById('jellyfin-start-btn');
-    const stopBtn = document.getElementById('jellyfin-stop-btn');
-    const statusEl = document.getElementById('jellyfin-status');
-
     async function fetchStats() {
         try {
             const response = await fetch('/api/stats');
@@ -97,66 +93,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function checkJellyfinStatus() {
-        try {
-            const response = await fetch('/api/jellyfin/status');
-            if (!response.ok) throw new Error('Status respons niet oké');
-            const data = await response.json();
-            
-            if (!statusEl) return;
+    // Herbruikbare functie voor het beheren van willekeurige containers/services
+    function setupServiceControl(serviceName, apiPrefix) {
+        const startBtn = document.getElementById(`${serviceName}-start-btn`);
+        const stopBtn = document.getElementById(`${serviceName}-stop-btn`);
+        const statusEl = document.getElementById(`${serviceName}-status`);
 
-            if (data.status === 'online') {
-                statusEl.innerText = "Online ●";
-                statusEl.style.color = "#22c55e";
-            } else {
-                statusEl.innerText = "Offline ●";
-                statusEl.style.color = "#ef4444";
-            }
-        } catch (error) {
-            console.error('Fout bij ophalen van Jellyfin status:', error);
-            if (statusEl) {
-                statusEl.innerText = "Error ●";
-                statusEl.style.color = "#f59e0b";
+        async function checkStatus() {
+            try {
+                const response = await fetch(`/api/${apiPrefix}/status`);
+                if (!response.ok) throw new Error('Status respons niet oké');
+                const data = await response.json();
+                
+                if (!statusEl) return;
+
+                if (data.status === 'online') {
+                    statusEl.innerText = "Online ●";
+                    statusEl.style.color = "#22c55e";
+                } else {
+                    statusEl.innerText = "Offline ●";
+                    statusEl.style.color = "#ef4444";
+                }
+            } catch (error) {
+                console.error(`Fout bij ophalen van ${serviceName} status:`, error);
+                if (statusEl) {
+                    statusEl.innerText = "Error ●";
+                    statusEl.style.color = "#f59e0b";
+                }
             }
         }
-    }
 
-    async function controlJellyfin(action) {
-        // Blokkeer knoppen tijdelijk tegen spam-klikken
-        if (startBtn) startBtn.disabled = true;
-        if (stopBtn) stopBtn.disabled = true;
+        async function controlAction(action) {
+            if (startBtn) startBtn.disabled = true;
+            if (stopBtn) stopBtn.disabled = true;
 
-        try {
-            const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
-            const data = await response.json();
-            console.log(data.message);
-            
-            // Geef de server even de tijd om te schakelen en check dan de status opnieuw
-            setTimeout(checkJellyfinStatus, 2000);
-        } catch (error) {
-            console.error(`Fout bij ${action} van Jellyfin:`, error);
-        } finally {
-            // Ontgrendel de knoppen na 3 seconden weer
-            setTimeout(() => {
-                if (startBtn) startBtn.disabled = false;
-                if (stopBtn) stopBtn.disabled = false;
-            }, 3000);
+            try {
+                const response = await fetch(`/api/${apiPrefix}/${action}`, { method: 'POST' });
+                const data = await response.json();
+                console.log(data.message);
+                
+                setTimeout(checkStatus, 2000);
+            } catch (error) {
+                console.error(`Fout bij ${action} van ${serviceName}:`, error);
+            } finally {
+                setTimeout(() => {
+                    if (startBtn) startBtn.disabled = false;
+                    if (stopBtn) stopBtn.disabled = false;
+                }, 3000);
+            }
         }
+
+        if (startBtn) {
+            startBtn.addEventListener('click', () => controlAction('start'));
+        }
+
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => controlAction('stop'));
+        }
+
+        // Initieel aanroepen en op interval zetten
+        checkStatus();
+        setInterval(checkStatus, 2000);
     }
 
-    if (startBtn) {
-        startBtn.addEventListener('click', () => controlJellyfin('start'));
-    }
+    // Initialiseer zowel Jellyfin als AdGuard via de schone herbruikbare functie
+    setupServiceControl('jellyfin', 'jellyfin');
+    setupServiceControl('adguard', 'adguard');
 
-    if (stopBtn) {
-        stopBtn.addEventListener('click', () => controlJellyfin('stop'));
-    }
-
-    // Directe eerste uitvoer
+    // Systeemstatistieken ophalen
     fetchStats();
-    checkJellyfinStatus();
-
-    // Netjes op een stabiel interval van 2 seconden gezet om serverbelasting te minimaliseren
     setInterval(fetchStats, 2000);
-    setInterval(checkJellyfinStatus, 2000);
 });
