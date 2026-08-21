@@ -146,5 +146,5 @@ document.addEventListener('DOMContentLoaded', () => {
     checkJellyfinStatus();
 
     setInterval(fetchStats, 500);
-    setInterval(checkJellyfinStatus, 10000);
+    setInterval(checkJellyfinStatus, 500);
 });
