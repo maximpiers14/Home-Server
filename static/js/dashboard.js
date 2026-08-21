@@ -119,15 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function controlJellyfin(action) {
-        const statusEl = document.getElementById('jellyfin-status');
+        const messageEl = document.getElementById('jellyfin-message');
         
-        if (statusEl) {
+        if (messageEl) {
             if (action === 'start') {
-                statusEl.innerText = "Bezig met starten... ●";
-                statusEl.style.color = "#f59e0b";
+                messageEl.innerText = "Server wordt gestart...";
+                messageEl.style.color = "#f59e0b";
             } else {
-                statusEl.innerText = "Bezig met stoppen... ●";
-                statusEl.style.color = "#f59e0b";
+                messageEl.innerText = "Server wordt gestopt...";
+                messageEl.style.color = "#f59e0b";
             }
         }
 
@@ -136,12 +136,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             console.log(data.message);
             
-            setTimeout(checkJellyfinStatus, 2000);
+            setTimeout(() => {
+                if (messageEl) {
+                    messageEl.innerText = action === 'start' ? "Server is gestart!" : "Server is gestopt!";
+                    messageEl.style.color = "#22c55e";
+                    
+                    setTimeout(() => { messageEl.innerText = ""; }, 3000);
+                }
+            }, 1500);
+
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
-            if (statusEl) {
-                statusEl.innerText = "Fout bij actie ●";
-                statusEl.style.color = "#ef4444";
+            if (messageEl) {
+                messageEl.innerText = "Actie mislukt!";
+                messageEl.style.color = "#ef4444";
             }
         }
     }
@@ -161,5 +169,5 @@ document.addEventListener('DOMContentLoaded', () => {
     checkJellyfinStatus();
 
     setInterval(fetchStats, 500);
-    setInterval(checkJellyfinStatus, 10000);
+    setInterval(checkJellyfinStatus, 500);
 });
