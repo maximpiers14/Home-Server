@@ -124,6 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
             const data = await response.json();
             console.log(data.message);
+            
+            setTimeout(checkJellyfinStatus, 1500);
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
         }
@@ -144,5 +146,5 @@ document.addEventListener('DOMContentLoaded', () => {
     checkJellyfinStatus();
 
     setInterval(fetchStats, 500);
-    setInterval(checkJellyfinStatus, 500);
+    setInterval(checkJellyfinStatus, 10000);
 });
