@@ -118,14 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Volledig gestript van alle bericht-logica
     async function controlJellyfin(action) {
         try {
             const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
             const data = await response.json();
             console.log(data.message);
-            
-            // Omdat de statuschecker nu elke 500ms loopt, pikt hij de wijziging vanzelf snel op
-            setTimeout(checkJellyfinStatus, 1000);
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
         }
