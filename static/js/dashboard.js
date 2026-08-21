@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function checkJellyfinStatus() {
         try {
-            // Aangepast naar de correcte API-route
             const response = await fetch('/api/jellyfin/status');
             const data = await response.json();
             
@@ -120,14 +119,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function controlJellyfin(action) {
+        const statusEl = document.getElementById('jellyfin-status');
+        
+        if (statusEl) {
+            if (action === 'start') {
+                statusEl.innerText = "Bezig met starten... ●";
+                statusEl.style.color = "#f59e0b";
+            } else {
+                statusEl.innerText = "Bezig met stoppen... ●";
+                statusEl.style.color = "#f59e0b";
+            }
+        }
+
         try {
             const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
             const data = await response.json();
             console.log(data.message);
             
-            setTimeout(checkJellyfinStatus, 1500);
+            setTimeout(checkJellyfinStatus, 2000);
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
+            if (statusEl) {
+                statusEl.innerText = "Fout bij actie ●";
+                statusEl.style.color = "#ef4444";
+            }
         }
     }
 
