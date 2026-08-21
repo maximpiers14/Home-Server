@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function checkJellyfinStatus() {
         try {
-            const response = await fetch('/api/jellyfin/status');
+            const response = await fetch('/api/jellyfin-status');
             const data = await response.json();
             
             const statusEl = document.getElementById('jellyfin-status');
@@ -103,19 +103,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.status === 'online') {
                 statusEl.innerText = "Online ●";
-                statusEl.style.color = "green";
+                statusEl.style.color = "#22c55e";
             } else {
                 statusEl.innerText = "Offline ●";
-                statusEl.style.color = "red";
+                statusEl.style.color = "#ef4444";
             }
         } catch (error) {
             console.error('Fout bij ophalen van Jellyfin status:', error);
             const statusEl = document.getElementById('jellyfin-status');
             if (statusEl) {
                 statusEl.innerText = "Error ●";
-                statusEl.style.color = "orange";
+                statusEl.style.color = "#f59e0b";
             }
         }
+    }
+
+    async function controlJellyfin(action) {
+        try {
+            const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
+            const data = await response.json();
+            console.log(data.message);
+            
+            setTimeout(checkJellyfinStatus, 1500);
+        } catch (error) {
+            console.error(`Fout bij ${action} van Jellyfin:`, error);
+        }
+    }
+
+    const startBtn = document.getElementById('jellyfin-start-btn');
+    const stopBtn = document.getElementById('jellyfin-stop-btn');
+
+    if (startBtn) {
+        startBtn.addEventListener('click', () => controlJellyfin('start'));
+    }
+
+    if (stopBtn) {
+        stopBtn.addEventListener('click', () => controlJellyfin('stop'));
     }
 
     fetchStats();
