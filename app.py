@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, render_template, redirect, url_for
 import psutil
 import requests
+import docker
+
+client = docker.from_env()
 
 app = Flask(__name__)
 
@@ -28,7 +31,7 @@ def stats():
 
 # ALL THE JELLYFIN SERVER ROUTES
 
-@app.route("/api/jellyfin-status")
+@app.route("/api/jellyfin/status")
 def jelly_stats():
     try:
         response = requests.get("http://localhost:8096/system/ping", timeout=2)
@@ -38,6 +41,24 @@ def jelly_stats():
         pass
 
     return jsonify({"status": "offline"})
+
+@app.route("/api/jellyfin/start", methods=["POST"])
+def start_jellyfin():
+    try:
+        container = client.containers.get("jellyfin")
+        container.start()
+        return jsonify({"success": True, "message": "Jellyfin gestart"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/jellyfin/stop", methods=["POST"])
+def stop_jellyfin():
+    try:
+        container = client.containers.get("jellyfin")
+        container.stop()
+        return jsonify({"success": {"success": True, "message": "Jellyfin gestopt"}})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 # ------------
 # WEB ROUTES

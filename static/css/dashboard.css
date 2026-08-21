@@ -102,3 +102,49 @@ header h2 {
     color: #7dd3fc;
     text-decoration: underline;
 }
+
+/* Container voor de actie-knoppen */
+.control-buttons {
+    flex-grow: 1;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Basisstijl voor de knoppen */
+.btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: 1px solid #334155;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Start knop (accentkleur passend bij je dashboard) */
+.btn-start {
+    background-color: #0284c7;
+    color: #f8fafc;
+}
+
+.btn-start:hover {
+    background-color: #0369a1;
+    border-color: #38bdf8;
+    transform: translateY(-2px);
+}
+
+/* Stop knop (subtiele rode/waarschuwingstint) */
+.btn-stop {
+    background-color: #1e293b;
+    color: #ef4444;
+    border-color: #7f1d1d;
+}
+
+.btn-stop:hover {
+    background-color: #7f1d1d;
+    color: #f8fafc;
+    border-color: #ef4444;
+    transform: translateY(-2px);
+}
