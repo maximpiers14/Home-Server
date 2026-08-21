@@ -95,7 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function checkJellyfinStatus() {
         try {
-            const response = await fetch('/api/jellyfin-status');
+            // Aangepast naar de correcte API-route
+            const response = await fetch('/api/jellyfin/status');
             const data = await response.json();
             
             const statusEl = document.getElementById('jellyfin-status');
