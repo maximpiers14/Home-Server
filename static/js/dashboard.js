@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function checkJellyfinStatus() {
         try {
-            // Aangepast naar de correcte API-route
             const response = await fetch('/api/jellyfin/status');
             const data = await response.json();
             
@@ -120,14 +119,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function controlJellyfin(action) {
+        // Richt zich strikt op het bericht-element onder de knoppen
+        const messageEl = document.getElementById('jellyfin-message');
+        
+        if (messageEl) {
+            if (action === 'start') {
+                messageEl.innerText = "Server wordt gestart...";
+                messageEl.style.color = "#f59e0b";
+            } else {
+                messageEl.innerText = "Server wordt gestopt...";
+                messageEl.style.color = "#f59e0b";
+            }
+        } else {
+            console.error("Kan element #jellyfin-message niet vinden in de HTML!");
+        }
+
         try {
             const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
             const data = await response.json();
             console.log(data.message);
             
-            setTimeout(checkJellyfinStatus, 1500);
+            setTimeout(() => {
+                if (messageEl) {
+                    messageEl.innerText = action === 'start' ? "Server is gestart!" : "Server is gestopt!";
+                    messageEl.style.color = "#22c55e";
+                    
+                    setTimeout(() => { messageEl.innerText = ""; }, 3000);
+                }
+            }, 1500);
+
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
+            if (messageEl) {
+                messageEl.innerText = "Actie mislukt!";
+                messageEl.style.color = "#ef4444";
+            }
         }
     }
 
