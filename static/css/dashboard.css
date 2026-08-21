@@ -89,3 +89,16 @@ header h2 {
     align-items: center;
     justify-content: center;
 }
+
+.jellyfin-link {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #38bdf8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.jellyfin-link:hover {
+    color: #7dd3fc;
+    text-decoration: underline;
+}
