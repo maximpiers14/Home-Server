@@ -90,7 +90,7 @@ header h2 {
     justify-content: center;
 }
 
-.jellyfin-link {
+.adguard-link {
     font-size: 1.5rem;
     font-weight: 700;
     color: #38bdf8;
@@ -98,7 +98,7 @@ header h2 {
     transition: color 0.3s ease;
 }
 
-.jellyfin-link:hover {
+.adguard-link:hover {
     color: #7dd3fc;
     text-decoration: underline;
 }
@@ -123,7 +123,7 @@ header h2 {
     transition: all 0.3s ease;
 }
 
-/* Start knop (accentkleur passend bij je dashboard) */
+/* Start knop */
 .btn-start {
     background-color: #0284c7;
     color: #f8fafc;
@@ -135,7 +135,7 @@ header h2 {
     transform: translateY(-2px);
 }
 
-/* Stop knop (subtiele rode/waarschuwingstint) */
+/* Stop knop */
 .btn-stop {
     background-color: #1e293b;
     color: #ef4444;
@@ -149,11 +149,20 @@ header h2 {
     transform: translateY(-2px);
 }
 
-#jellyfin-message {
+#adguard-message {
     font-size: 0.9rem;
     font-weight: 500;
     color: #94a3b8;
     margin: 0;
     min-height: 1.2rem;
     transition: color 0.3s ease;
+}
+
+/* Status kleurtjes voor de tekst */
+.status-online {
+    color: #38bdf8 !important;
+}
+
+.status-offline {
+    color: #ef4444 !important;
 }
