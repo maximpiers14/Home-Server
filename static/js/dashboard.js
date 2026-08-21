@@ -75,6 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cpuGauge = new GaugePainter('cpu-gauge', '#38bdf8');
     const ramGauge = new GaugePainter('ram-gauge', '#34d399');
 
+    const startBtn = document.getElementById('jellyfin-start-btn');
+    const stopBtn = document.getElementById('jellyfin-stop-btn');
+    const statusEl = document.getElementById('jellyfin-status');
+
     async function fetchStats() {
         try {
             const response = await fetch('/api/stats');
@@ -96,9 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkJellyfinStatus() {
         try {
             const response = await fetch('/api/jellyfin/status');
+            if (!response.ok) throw new Error('Status respons niet oké');
             const data = await response.json();
             
-            const statusEl = document.getElementById('jellyfin-status');
             if (!statusEl) return;
 
             if (data.status === 'online') {
@@ -110,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Fout bij ophalen van Jellyfin status:', error);
-            const statusEl = document.getElementById('jellyfin-status');
             if (statusEl) {
                 statusEl.innerText = "Error ●";
                 statusEl.style.color = "#f59e0b";
@@ -118,21 +121,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Volledig gestript van alle bericht-logica
     async function controlJellyfin(action) {
+        // Blokkeer knoppen tijdelijk tegen spam-klikken
+        if (startBtn) startBtn.disabled = true;
+        if (stopBtn) stopBtn.disabled = true;
+
         try {
             const response = await fetch(`/api/jellyfin/${action}`, { method: 'POST' });
             const data = await response.json();
             console.log(data.message);
             
-            setTimeout(checkJellyfinStatus, 1500);
+            // Geef de server even de tijd om te schakelen en check dan de status opnieuw
+            setTimeout(checkJellyfinStatus, 2000);
         } catch (error) {
             console.error(`Fout bij ${action} van Jellyfin:`, error);
+        } finally {
+            // Ontgrendel de knoppen na 3 seconden weer
+            setTimeout(() => {
+                if (startBtn) startBtn.disabled = false;
+                if (stopBtn) stopBtn.disabled = false;
+            }, 3000);
         }
     }
-
-    const startBtn = document.getElementById('jellyfin-start-btn');
-    const stopBtn = document.getElementById('jellyfin-stop-btn');
 
     if (startBtn) {
         startBtn.addEventListener('click', () => controlJellyfin('start'));
@@ -142,9 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
         stopBtn.addEventListener('click', () => controlJellyfin('stop'));
     }
 
+    // Directe eerste uitvoer
     fetchStats();
     checkJellyfinStatus();
 
-    setInterval(fetchStats, 10000);
-    setInterval(checkJellyfinStatus, 10000);
+    // Netjes op een stabiel interval van 2 seconden gezet om serverbelasting te minimaliseren
+    setInterval(fetchStats, 2000);
+    setInterval(checkJellyfinStatus, 2000);
 });
