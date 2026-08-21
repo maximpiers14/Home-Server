@@ -90,7 +90,8 @@ header h2 {
     justify-content: center;
 }
 
-.adguard-link {
+/* Universele stijl voor alle externe links naar services */
+.service-link {
     font-size: 1.5rem;
     font-weight: 700;
     color: #38bdf8;
@@ -98,7 +99,7 @@ header h2 {
     transition: color 0.3s ease;
 }
 
-.adguard-link:hover {
+.service-link:hover {
     color: #7dd3fc;
     text-decoration: underline;
 }
@@ -149,16 +150,12 @@ header h2 {
     transform: translateY(-2px);
 }
 
-#adguard-message {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #94a3b8;
-    margin: 0;
-    min-height: 1.2rem;
-    transition: color 0.3s ease;
+/* Status kleurtjes (universeel toepasbaar op elke status-p tag) */
+.status-text {
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
-/* Status kleurtjes voor de tekst */
 .status-online {
     color: #38bdf8 !important;
 }

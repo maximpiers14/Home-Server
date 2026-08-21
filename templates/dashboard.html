@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}?v=99" defer></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}?v=100" defer></script>
     
     <title>Dashboard</title>
 </head>
@@ -15,6 +15,7 @@
         <h1>Home Server Dashboard</h1>
     </header>
 
+    <!-- Algemene Server Status (CPU, RAM, Disk) -->
     <div class="container">
         <header>
             <h2>Server Status</h2>
@@ -46,6 +47,7 @@
         </div>
     </div>
 
+    <!-- Jellyfin Server Sectie -->
     <div class="container">
         <header>
             <h2>Jellyfin Server</h2>
@@ -63,19 +65,20 @@
             <div class="card">
                 <h3>Status</h3>
                 <div class="disk-display">
-                    <p id="jellyfin-status">Checking...</p>
+                    <p id="jellyfin-status" class="status-text">Checking...</p>
                 </div>
             </div>
 
             <div class="card">
                 <h3>Open Media Server</h3>
                 <div class="disk-display">
-                    <a href="http://192.168.68.59:8096" target="_blank" class="jellyfin-link">Start Jellyfin ➔</a>
+                    <a href="http://192.168.68.59:8096" target="_blank" class="service-link">Open Jellyfin ➔</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- AdGuard Server Sectie -->
     <div class="container">
         <header>
             <h2>AdGuard Server</h2>
@@ -93,14 +96,14 @@
             <div class="card">
                 <h3>Status</h3>
                 <div class="disk-display">
-                    <p id="adguard-status">Checking...</p>
+                    <p id="adguard-status" class="status-text">Checking...</p>
                 </div>
             </div>
 
             <div class="card">
                 <h3>Open AdGuard Dashboard</h3>
                 <div class="disk-display">
-                    <a href="http://192.168.68.59:8080" target="_blank" class="adguard-link">Open AdGuard ➔</a>
+                    <a href="http://192.168.68.59:8080" target="_blank" class="service-link">Open AdGuard ➔</a>
                 </div>
             </div>
         </div>
