@@ -28,17 +28,16 @@ def stats():
 
 # ALL THE JELLYFIN SERVER ROUTES
 
-@app.route("/api/jellyfin/stats")
+@app.route("/api/jellyfin-status")
 def jelly_stats():
-    try: 
+    try:
         response = requests.get("http://localhost:8096/system/ping", timeout=2)
         if response.status_code == 200:
             return jsonify({"status": "online"})
     except requests.exceptions.RequestException:
         pass
-    
-    return jsonify({"status": "offline"})
 
+    return jsonify({"status": "offline"})
 
 # ------------
 # WEB ROUTES
