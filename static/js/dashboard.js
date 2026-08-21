@@ -12,7 +12,6 @@ class GaugePainter {
 
     resize() {
         if (!this.canvas) return;
-        // Haal de actuele grootte op van het element op het scherm
         const rect = this.canvas.getBoundingClientRect();
         this.scale = window.devicePixelRatio || 1;
         
@@ -30,7 +29,6 @@ class GaugePainter {
     draw(percent) {
         if (!this.ctx) return;
         
-        // Zorg dat de afmetingen kloppen als de pagina verandert
         const rect = this.canvas.getBoundingClientRect();
         if (this.width !== rect.width || this.height !== rect.height) {
             this.resize();
@@ -38,14 +36,12 @@ class GaugePainter {
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Achtergrondboog
         this.ctx.beginPath();
         this.ctx.arc(this.centerX, this.centerY, this.radius, Math.PI, 0);
         this.ctx.lineWidth = 12;
         this.ctx.strokeStyle = '#334155';
         this.ctx.stroke();
 
-        // Actieve boog
         const startAngle = Math.PI;
         const endAngle = Math.PI + (percent / 100) * Math.PI;
 
@@ -56,7 +52,6 @@ class GaugePainter {
         this.ctx.lineCap = 'round';
         this.ctx.stroke();
 
-        // Wijzer
         const angle = startAngle + (percent / 100) * Math.PI;
         const needleLength = this.radius * 0.85;
         const needleX = this.centerX + Math.cos(angle) * needleLength;
@@ -69,7 +64,6 @@ class GaugePainter {
         this.ctx.strokeStyle = '#ffffff';
         this.ctx.stroke();
 
-        // Middenpunt
         this.ctx.beginPath();
         this.ctx.arc(this.centerX, this.centerY, 6, 0, Math.PI * 2);
         this.ctx.fillStyle = '#ffffff';
@@ -78,8 +72,8 @@ class GaugePainter {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const cpuGauge = new GaugePainter('cpu-gauge', '#38bdf8'); // Blauw
-    const ramGauge = new GaugePainter('ram-gauge', '#34d399'); // Groen
+    const cpuGauge = new GaugePainter('cpu-gauge', '#38bdf8');
+    const ramGauge = new GaugePainter('ram-gauge', '#34d399');
 
     async function fetchStats() {
         try {
@@ -87,11 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Netwerkrespons was niet oké');
             const data = await response.json();
 
-            // Update de meters
             cpuGauge.draw(data.cpu);
             ramGauge.draw(data.ram_percent);
 
-            // Update de tekst
             document.getElementById('cpu-usage').innerText = data.cpu + '%';
             document.getElementById('ram-usage').innerText = data.ram_percent + '%';
             document.getElementById('disk-usage').innerText = data.disk_percent + '%';
@@ -101,6 +93,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function checkJellyfinStatus() {
+        try {
+            const response = await fetch('/api/jellyfin-status');
+            const data = await response.json();
+            
+            const statusEl = document.getElementById('jellyfin-status');
+            if (!statusEl) return;
+
+            if (data.status === 'online') {
+                statusEl.innerText = "Online ●";
+                statusEl.style.color = "green";
+            } else {
+                statusEl.innerText = "Offline ●";
+                statusEl.style.color = "red";
+            }
+        } catch (error) {
+            console.error('Fout bij ophalen van Jellyfin status:', error);
+            const statusEl = document.getElementById('jellyfin-status');
+            if (statusEl) {
+                statusEl.innerText = "Error ●";
+                statusEl.style.color = "orange";
+            }
+        }
+    }
+
     fetchStats();
+    checkJellyfinStatus();
+
     setInterval(fetchStats, 500);
+    setInterval(checkJellyfinStatus, 10000);
 });

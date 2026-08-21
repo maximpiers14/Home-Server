@@ -10,37 +10,51 @@
 </head>
 <body>
 
+    <header>
+        <h1>Home Server Dashboard</h1>
+    </header>
+
     <div class="container">
-        <!-- Header -->
         <header>
-            <h1>Home Server Dashboard</h1>
+            <h2>Server Status</h2>
         </header>
 
-        <!-- Stats -->
         <div class="stats-grid">
-            <!-- CPU Meter Card -->
             <div class="card">
-                <h2>CPU Usage</h2>
+                <h3>CPU Usage</h3>
                 <div class="gauge-wrapper">
                     <canvas id="cpu-gauge"></canvas>
                 </div>
                 <p id="cpu-usage">--%</p>
             </div>
 
-            <!-- RAM Meter Card -->
             <div class="card">
-                <h2>RAM Usage</h2>
+                <h3>RAM Usage</h3>
                 <div class="gauge-wrapper">
                     <canvas id="ram-gauge"></canvas>
                 </div>
                 <p id="ram-usage">--%</p>
             </div>
 
-            <!-- Disk Card -->
             <div class="card">
-                <h2>Disk Usage</h2>
+                <h3>Disk Usage</h3>
                 <div class="disk-display">
                     <p id="disk-usage">--%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h2>Jellyfin Server</h2>
+        </header>
+
+        <div class="stats-grid">
+            <div class="card">
+                <h3>Status</h3>
+                <div class="disk-display">
+                    <p id="jellyfin-status">Checking...</p>
                 </div>
             </div>
         </div>

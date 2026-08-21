@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, redirect, url_for
 import psutil
+import requests
 
 app = Flask(__name__)
 
@@ -10,6 +11,8 @@ app = Flask(__name__)
 @app.route("/api/health")
 def health():
     return jsonify({"status":"ok"})
+
+# API endpoint for the stats of the server
 
 @app.route("/api/stats")
 def stats(): 
@@ -22,6 +25,20 @@ def stats():
         "ram_percent": ram.percent,
         "disk_percent": disk.percent
     })
+
+# ALL THE JELLYFIN SERVER ROUTES
+
+@app.route("/api/jellyfin/stats")
+def jelly_stats():
+    try: 
+        response = requests.get("http://localhost:8096/system/ping", timeout=2)
+        if response.status_code == 200:
+            return jsonify({"status": "online"})
+    except requests.exceptions.RequestException:
+        pass
+    
+    return jsonify({"status": "offline"})
+
 
 # ------------
 # WEB ROUTES

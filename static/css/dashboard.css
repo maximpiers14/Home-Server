@@ -1,4 +1,3 @@
-/* Basis / Layout */
 body {
     background-color: #0f172a;
     color: #f8fafc;
@@ -9,6 +8,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    margin-bottom: 2rem;
 }
 
 header h1 {
@@ -18,14 +18,19 @@ header h1 {
     text-align: center;
 }
 
-/* Grid dat automatisch schaalt op basis van schermgrootte */
+header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
 }
 
-/* Interactieve Cards met smooth transitions */
 .card {
     background-color: #1e293b;
     border: 1px solid #334155;
@@ -38,14 +43,13 @@ header h1 {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Interactie: kaart veert omhoog en krijgt een gloed bij hover */
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
     border-color: #475569;
 }
 
-.card h2 {
+.card h3 {
     font-size: 1rem;
     font-weight: 600;
     color: #94a3b8;
@@ -54,11 +58,10 @@ header h1 {
     letter-spacing: 0.05em;
 }
 
-/* Dynamische wrapper voor de canvas (geen vaste hoogte) */
 .gauge-wrapper {
     width: 100%;
     max-width: 220px;
-    aspect-ratio: 2 / 1; /* Houdt altijd de juiste halve-cirkel verhouding, ongeacht schermgrootte */
+    aspect-ratio: 2 / 1;
     position: relative;
     margin: 0.5rem 0;
 }
@@ -68,7 +71,6 @@ header h1 {
     height: 100%;
 }
 
-/* Tekst onder de meter */
 .card p {
     font-size: 1.75rem;
     font-weight: 700;
